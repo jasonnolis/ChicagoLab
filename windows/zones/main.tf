@@ -25,11 +25,13 @@ resource "azurerm_windows_virtual_machine_scale_set" "main" {
   name                 = "${var.prefix}vmss"
   resource_group_name  = azurerm_resource_group.main.name
   location             = azurerm_resource_group.main.location
-  sku                  = "Standard_F2s_v2"
+  sku                  = "Standard_F2"
   instances            = 3
   admin_username       = "adminuser"
   admin_password       = "P@ssw0rd1234!"
   computer_name_prefix = var.prefix
+  zones                = [1, 2, 3]
+  zone_balance         = true
 
   source_image_reference {
     publisher = "MicrosoftWindowsServer"
@@ -52,9 +54,5 @@ resource "azurerm_windows_virtual_machine_scale_set" "main" {
   os_disk {
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
-
-    diff_disk_settings {
-      option = "Local"
-    }
   }
 }
